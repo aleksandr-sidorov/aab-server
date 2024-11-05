@@ -15,8 +15,10 @@ Before running the application, make sure you have the following installed:
 
 To check if you have Node.js and npm installed, run:
 
+```bash
 node -v
 npm -v
+```
 
 ## Getting Started
 
@@ -45,19 +47,15 @@ This will install the required packages listed in package.json, including expres
 node server.js
 The server will start and listen on port 3000 by default. You should see a message like:
 
+```bash
 Server is running on http://localhost:3000
+```
 
 4. Test the API
    You can now test the API using tools like Postman or curl. Below are the steps to test the register endpoint.
 
 Endpoint:
 POST /register
-Request Body:
-The body of the request should be in JSON format and contain the following fields:
-
-username: A string containing only letters (between 4 and 254 characters).
-password: A string that contains at least one uppercase letter, one number, one special character, and is between 8 and 16 characters long.
-email: A valid email format.
 
 Example:
 
