@@ -7,6 +7,7 @@ app.post("/register", (req, res) => {
   const { username, password, email, fullname } = req.body;
 
   if (!username || !password || !email) {
+    console.log("Error:", "Username, password and email are required");
     return res.status(400).json({
       status: "error",
       message: "Username, password and email are required",
