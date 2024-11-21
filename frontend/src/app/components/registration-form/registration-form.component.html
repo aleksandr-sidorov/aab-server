@@ -1,0 +1,69 @@
+<section>
+  <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
+    <mat-form-field>
+      <mat-label>Username</mat-label>
+      <input
+        matInput
+        placeholder="username"
+        formControlName="username"
+        required
+      />
+      @if (registrationForm.get("username")?.invalid) {
+        <mat-error>Error</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Email</mat-label>
+      <input
+        matInput
+        placeholder="pat@example.com"
+        formControlName="email"
+        required
+      />
+      @if (registrationForm.get("email")?.invalid) {
+        <mat-error>Error</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Password</mat-label>
+      <input
+        matInput
+        formControlName="password"
+        required
+      />
+      @if (registrationForm.get("password")?.invalid) {
+        <mat-error>Error</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Confirm password</mat-label>
+      <input
+        matInput
+        formControlName="confirmPassword"
+        required
+      />
+      @if (registrationForm.get("confirmPassword")?.invalid) {
+        <mat-error>Error</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Enter your full name</mat-label>
+      <input
+        matInput
+        placeholder="fullname"
+        formControlName="fullname"
+      />
+      @if (registrationForm.get("fullname")?.invalid) {
+        <mat-error>Error</mat-error>
+      }
+    </mat-form-field>
+
+    <button type="submit" mat-flat-button [disabled]="!registrationForm.valid">
+      Submit
+    </button>
+  </form>
+</section>
