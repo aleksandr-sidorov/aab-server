@@ -17,6 +17,7 @@ app.post("/register", (req, res) => {
   console.log("Username:", username);
   console.log("Password:", password);
   console.log("Email:", email);
+  console.log("Full name:", fullname);
 
   const response = {
     status: "success",
