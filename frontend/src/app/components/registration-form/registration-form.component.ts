@@ -1,5 +1,4 @@
-import { Component } from '@angular/core';
-import { UserService } from '../../services/user.service';
+import { Component, signal } from '@angular/core';
 import {
   AbstractControl,
   FormControl,
@@ -9,16 +8,21 @@ import {
   ValidationErrors,
   Validators,
 } from '@angular/forms';
-import { BehaviorSubject } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { CommonModule } from '@angular/common';
+import {
+  UserService,
+  UserServiceRegisterResponse,
+} from '../../services/user.service';
 
 @Component({
   selector: 'app-registration-form',
   standalone: true,
   imports: [
+    CommonModule,
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
@@ -30,6 +34,8 @@ import { MatButtonModule } from '@angular/material/button';
   styleUrl: './registration-form.component.css',
 })
 export class RegistrationFormComponent {
+  readonly backendError = signal<string | null>(null);
+  readonly backendSuccessMessage = signal<string | null>(null);
   registrationForm = new FormGroup({
     username: new FormControl<string>('', {
       validators: [
@@ -53,7 +59,7 @@ export class RegistrationFormComponent {
     }),
     fullname: new FormControl<string>('', { nonNullable: true }),
   });
-  backendErrors$ = new BehaviorSubject<string[]>([]);
+
   constructor(private userService: UserService) {}
 
   validatePasswordMatch(control: AbstractControl): ValidationErrors | null {
@@ -65,17 +71,31 @@ export class RegistrationFormComponent {
 
   onSubmit() {
     const { username, email, password, fullname } = this.registrationForm.value;
-    if (this.registrationForm.valid && !!email && !!username && !!password) {
+    if (this.registrationForm.valid && !!username && !!email && !!password) {
       this.userService
         .userRegister({ username, email, password, fullname })
         .subscribe({
-          next: () => {
-            this.backendErrors$.next([]);
+          next: (response: UserServiceRegisterResponse) => {
+            console.log('response', response);
+            this.backendSuccessMessage.set(
+              response?.status === 'success' ? response.message : null,
+            );
+            this.backendError.set(null);
           },
-          error: (response: HttpErrorResponse) => {
-            if (typeof response.error.message === 'string') {
-              this.backendErrors$.next([response.error.message]);
+          error: (errorResponse: HttpErrorResponse) => {
+            console.log('errorResponse', errorResponse);
+            if (errorResponse.status === 0) {
+              this.backendError.set(errorResponse.message);
+              return;
             }
+            if (
+              errorResponse.error?.status === 'error' &&
+              typeof errorResponse.error?.message === 'string'
+            ) {
+              this.backendError.set(errorResponse.error.message);
+              return;
+            }
+            this.backendSuccessMessage.set(null);
           },
         });
     }
