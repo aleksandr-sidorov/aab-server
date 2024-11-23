@@ -8,10 +8,11 @@ import {
   ValidationErrors,
   Validators,
 } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
 import { HttpErrorResponse } from '@angular/common/http';
+import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 import {
   UserService,
@@ -24,6 +25,7 @@ import {
   imports: [
     CommonModule,
     MatButtonModule,
+    MatCardModule,
     MatFormFieldModule,
     MatInputModule,
     FormsModule,
