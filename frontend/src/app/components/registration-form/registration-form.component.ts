@@ -36,28 +36,21 @@ import {
 export class RegistrationFormComponent {
   readonly backendError = signal<string | null>(null);
   readonly backendSuccessMessage = signal<string | null>(null);
+
   registrationForm = new FormGroup({
-    username: new FormControl<string>('', {
-      validators: [
-        Validators.required,
-        Validators.minLength(3),
-        Validators.maxLength(56),
-      ],
+    username: new FormControl('', {
+      validators: [Validators.required, Validators.minLength(3)],
     }),
-    email: new FormControl<string>('', {
+    email: new FormControl('', {
       validators: [Validators.required, Validators.email],
     }),
-    password: new FormControl<string>('', {
-      validators: [
-        Validators.required,
-        Validators.minLength(8),
-        Validators.maxLength(56),
-      ],
+    password: new FormControl('', {
+      validators: [Validators.required, Validators.minLength(8)],
     }),
-    confirmPassword: new FormControl<string>('', {
+    confirmPassword: new FormControl('', {
       validators: [Validators.required, this.validatePasswordMatch],
     }),
-    fullname: new FormControl<string>('', { nonNullable: true }),
+    fullname: new FormControl('', { nonNullable: true }),
   });
 
   constructor(private userService: UserService) {}
@@ -65,8 +58,27 @@ export class RegistrationFormComponent {
   validatePasswordMatch(control: AbstractControl): ValidationErrors | null {
     const password = control.parent?.get('password')?.value;
     const confirmPassword = control.parent?.get('confirmPassword')?.value;
-
     return password === confirmPassword ? null : { confirmPasswordError: true };
+  }
+
+  get usernameErrors() {
+    const username = this.registrationForm.get('username');
+    return this.mapValidationErrors(username);
+  }
+
+  get emailErrors() {
+    const email = this.registrationForm.get('email');
+    return this.mapValidationErrors(email);
+  }
+
+  get passwordErrors() {
+    const password = this.registrationForm.get('password');
+    return this.mapValidationErrors(password);
+  }
+
+  get confirmPasswordErrors() {
+    const confirmPassword = this.registrationForm.get('confirmPassword');
+    return this.mapValidationErrors(confirmPassword);
   }
 
   onSubmit() {
@@ -76,14 +88,12 @@ export class RegistrationFormComponent {
         .userRegister({ username, email, password, fullname })
         .subscribe({
           next: (response: UserServiceRegisterResponse) => {
-            console.log('response', response);
             this.backendSuccessMessage.set(
               response?.status === 'success' ? response.message : null,
             );
             this.backendError.set(null);
           },
           error: (errorResponse: HttpErrorResponse) => {
-            console.log('errorResponse', errorResponse);
             if (errorResponse.status === 0) {
               this.backendError.set(errorResponse.message);
               return;
@@ -99,5 +109,28 @@ export class RegistrationFormComponent {
           },
         });
     }
+  }
+
+  mapValidationErrors(control: AbstractControl | null) {
+    if (!control || !control.errors || control.valid) {
+      return [];
+    }
+    const { errors } = control;
+    return Object.keys(errors)
+      .map((key) => {
+        switch (key) {
+          case 'required':
+            return 'Field is required';
+          case 'email':
+            return 'Invalid email address';
+          case 'minlength':
+            return `Field must be at least ${errors[key].requiredLength} characters long`;
+          case 'confirmPasswordError':
+            return 'Passwords do not match';
+          default:
+            return null;
+        }
+      })
+      .filter((error) => typeof error === 'string');
   }
 }
