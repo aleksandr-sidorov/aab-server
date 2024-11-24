@@ -75,6 +75,7 @@ export class RegistrationFormComponent {
         ) {
           formGroup.get('confirmPassword')?.setErrors(null);
         }
+
         return null;
       }
     }
