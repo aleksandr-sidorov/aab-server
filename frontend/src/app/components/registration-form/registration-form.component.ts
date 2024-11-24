@@ -5,7 +5,6 @@ import {
   FormGroup,
   FormsModule,
   ReactiveFormsModule,
-  ValidationErrors,
   Validators,
 } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -39,28 +38,47 @@ export class RegistrationFormComponent {
   readonly backendError = signal<string | null>(null);
   readonly backendSuccessMessage = signal<string | null>(null);
 
-  registrationForm = new FormGroup({
-    username: new FormControl('', {
-      validators: [Validators.required, Validators.minLength(3)],
-    }),
-    email: new FormControl('', {
-      validators: [Validators.required, Validators.email],
-    }),
-    password: new FormControl('', {
-      validators: [Validators.required, Validators.minLength(8)],
-    }),
-    confirmPassword: new FormControl('', {
-      validators: [Validators.required, this.validatePasswordMatch],
-    }),
-    fullname: new FormControl('', { nonNullable: true }),
-  });
+  registrationForm = new FormGroup(
+    {
+      username: new FormControl('', {
+        validators: [Validators.required, Validators.minLength(3)],
+      }),
+      email: new FormControl('', {
+        validators: [Validators.required, Validators.email],
+      }),
+      password: new FormControl('', {
+        validators: [Validators.required, Validators.minLength(8)],
+      }),
+      confirmPassword: new FormControl('', {
+        validators: [Validators.required],
+      }),
+      fullname: new FormControl('', { nonNullable: true }),
+    },
+    this.passwordMatchValidator,
+  );
 
   constructor(private userService: UserService) {}
 
-  validatePasswordMatch(control: AbstractControl): ValidationErrors | null {
-    const password = control.parent?.get('password')?.value;
-    const confirmPassword = control.parent?.get('confirmPassword')?.value;
-    return password === confirmPassword ? null : { confirmPasswordError: true };
+  passwordMatchValidator(formGroup: AbstractControl) {
+    const password = formGroup.get('password')?.value;
+    const confirmPassword = formGroup.get('confirmPassword')?.value;
+
+    if (password && confirmPassword) {
+      if (password !== confirmPassword) {
+        formGroup
+          .get('confirmPassword')
+          ?.setErrors({ confirmPasswordError: true });
+        return { confirmPasswordError: true };
+      } else {
+        if (
+          formGroup.get('confirmPassword')?.hasError('confirmPasswordError')
+        ) {
+          formGroup.get('confirmPassword')?.setErrors(null);
+        }
+        return null;
+      }
+    }
+    return null;
   }
 
   get usernameErrors() {
