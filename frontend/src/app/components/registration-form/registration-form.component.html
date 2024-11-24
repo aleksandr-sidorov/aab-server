@@ -90,10 +90,14 @@
     </mat-card-content>
     <mat-card-footer>
       @if (backendError()) {
-        <div class="p-4 text-red-500">{{ backendError() }}</div>
+        <div class="p-2 m-2 text-red-700 bg-red-200 rounded-lg">
+          {{ backendError() }}
+        </div>
       }
       @if (backendSuccessMessage()) {
-        <div class="p-4 text-green-600">{{ backendSuccessMessage() }}</div>
+        <div class="p-2 m-2 text-green-700 bg-green-200 rounded-lg">
+          {{ backendSuccessMessage() }}
+        </div>
       }
     </mat-card-footer>
   </mat-card>
