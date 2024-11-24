@@ -118,21 +118,19 @@ export class RegistrationFormComponent {
       return [];
     }
     const { errors } = control;
-    return Object.keys(errors)
-      .map((key) => {
-        switch (key) {
-          case 'required':
-            return 'Field is required';
-          case 'email':
-            return 'Invalid email address';
-          case 'minlength':
-            return `Field must be at least ${errors[key].requiredLength} characters long`;
-          case 'confirmPasswordError':
-            return 'Passwords do not match';
-          default:
-            return null;
-        }
-      })
-      .filter((error) => typeof error === 'string');
+    return Object.keys(errors).map((key) => {
+      switch (key) {
+        case 'required':
+          return 'Field is required';
+        case 'email':
+          return 'Invalid email address';
+        case 'minlength':
+          return `Field must be at least ${errors[key].requiredLength} characters long`;
+        case 'confirmPasswordError':
+          return 'Passwords do not match';
+        default:
+          return `Field validation error: ${key}`;
+      }
+    });
   }
 }
