@@ -66,6 +66,12 @@
               <mat-error>{{ confirmPasswordError }}</mat-error>
             }
           </mat-form-field>
+          @for (
+            passwordMatchError of passwordMatchErrors;
+            track passwordMatchError + ""
+          ) {
+            <mat-error class="px-4 text-xs">{{ passwordMatchError }}</mat-error>
+          }
 
           <mat-form-field class="w-full">
             <mat-label>Enter your full name</mat-label>

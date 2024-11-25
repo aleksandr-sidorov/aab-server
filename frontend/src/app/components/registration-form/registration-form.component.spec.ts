@@ -56,6 +56,7 @@ describe('RegistrationFormComponent', () => {
     expect(component.emailErrors).toEqual(['Field is required']);
     expect(component.passwordErrors).toEqual(['Field is required']);
     expect(component.confirmPasswordErrors).toEqual(['Field is required']);
+    expect(component.passwordMatchErrors).toEqual([]);
   });
 
   it('should get minimum length errors on username and email fields if values does not meet criteria', () => {
@@ -76,6 +77,7 @@ describe('RegistrationFormComponent', () => {
       'Field must be at least 8 characters long',
     ]);
     expect(component.confirmPasswordErrors).toEqual([]);
+    expect(component.passwordMatchErrors).toEqual([]);
   });
 
   it('should get "Field must be a valid email" error on email field if value is not a valid email', () => {
@@ -92,6 +94,7 @@ describe('RegistrationFormComponent', () => {
     expect(component.emailErrors).toEqual(['Invalid email address']);
     expect(component.passwordErrors).toEqual([]);
     expect(component.confirmPasswordErrors).toEqual([]);
+    expect(component.passwordMatchErrors).toEqual([]);
   });
 
   it('should get "Passwords do not match" error on confirmPassword field if password and confirmPassword do not match', () => {
@@ -107,7 +110,8 @@ describe('RegistrationFormComponent', () => {
     expect(component.usernameErrors).toEqual([]);
     expect(component.emailErrors).toEqual([]);
     expect(component.passwordErrors).toEqual([]);
-    expect(component.confirmPasswordErrors).toEqual(['Passwords do not match']);
+    expect(component.confirmPasswordErrors).toEqual([]);
+    expect(component.passwordMatchErrors).toEqual(['Passwords do not match']);
   });
 
   it('should not be able to submit invalid form', async () => {

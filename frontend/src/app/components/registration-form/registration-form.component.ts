@@ -64,20 +64,9 @@ export class RegistrationFormComponent {
     const confirmPassword = formGroup.get('confirmPassword')?.value;
 
     if (password && confirmPassword) {
-      if (password !== confirmPassword) {
-        formGroup
-          .get('confirmPassword')
-          ?.setErrors({ confirmPasswordError: true });
-        return { confirmPasswordError: true };
-      } else {
-        if (
-          formGroup.get('confirmPassword')?.hasError('confirmPasswordError')
-        ) {
-          formGroup.get('confirmPassword')?.setErrors(null);
-        }
-
-        return null;
-      }
+      return password === confirmPassword
+        ? null
+        : { confirmPasswordError: true };
     }
     return null;
   }
@@ -100,6 +89,13 @@ export class RegistrationFormComponent {
   get confirmPasswordErrors() {
     const confirmPassword = this.registrationForm.get('confirmPassword');
     return this.mapValidationErrors(confirmPassword);
+  }
+
+  get passwordMatchErrors() {
+    if (this.registrationForm.hasError('confirmPasswordError')) {
+      return this.mapValidationErrors(this.registrationForm);
+    }
+    return [];
   }
 
   onSubmit() {
