@@ -66,6 +66,8 @@
               <mat-error>{{ confirmPasswordError }}</mat-error>
             }
           </mat-form-field>
+
+          <!-- Material UI shows the "mat-error" only if the control has validation error  -->
           @for (
             passwordMatchError of passwordMatchErrors;
             track passwordMatchError + ""

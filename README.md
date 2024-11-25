@@ -1,6 +1,14 @@
-# Node.js Register API
+# This package contains both backend and frontend parts of the project.
 
-This is a simple Node.js application that provides an API endpoint to handle register requests.
+Frontend application is using following packages:
+
+- Angular 18
+- Angular Material
+- Tailwind CSS
+- Cypress
+- ESLint
+- Prettier
+
 
 ## Prerequisites
 
@@ -29,13 +37,15 @@ cd aab-server
 ```
 
 2. Install Dependencies
-   <br />In the project directory, run the following command to install the necessary dependencies:
+   <br />In the project root directory, run the following commands to install the necessary dependencies:
 
 ```bash
 npm install
+cd frontend
+npm install
 ```
 
-This will install the required packages listed in package.json, including express.
+This will install the required packages listed in package.json for both the backend and frontend parts of the project.
 
 3. Run the Server
    <br />After installing the dependencies, you can start the server using the following command:
@@ -50,16 +60,27 @@ The server will start and listen on port 3000 by default. You should see a messa
 Server is running on http://localhost:3000
 ```
 
-4. Test the API
-   <br />You can now test the API using tools like Postman or curl. Below are the steps to test the register endpoint.
-   ``
-   Endpoint:
-   POST /register
-
-Example:
+4. Start frontend application
+   <br />After installing the dependencies, you can start the frontend using the following command:
 
 ```bash
-curl -X POST http://localhost:3000/register \
--H "Content-Type: application/json" \
--d '{"username": "myuser", "password": "Password123!", "email": "user@example.com"}'
+cd frontend
+npm run start
+```
+
+The frontend application runs on port 4200 by default.
+
+5. Unit tests
+    <br />To run the unit tests, run the following command from the `frontend` folder.
+
+ ```bash
+npm run test
+```
+
+6. E2E tests
+    <br />To run the Sypress E2E test, run the following command from the `frontend` folder.
+   Make sure that the Angular development server is **not** running before running the end-to-end tests. Otherwise, the Cypress server might be running on the port that is not included to the CORS settings fo the BE server.
+    
+```bash
+npm run e2e
 ```
